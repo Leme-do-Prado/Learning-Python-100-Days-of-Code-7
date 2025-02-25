@@ -1,60 +1,34 @@
-import random
 import string
 
-print("Hi! Welcome to the Hangman! \n This is a game between two players. \n Player1 chooses the word, "
-      "while Player2 tries to guess it.\n")
+print("Hi! Welcome to Caesar Cypher! \n This program encrypts and decrypts based on the ancient Caesar cypher method.\n"
+      "Let's start!")
 
-random_word_collection = ['dinosaur', 'coffee', 'coke', 'water', 'book']
-number_of_lives = 5
-word_to_be_guessed = list(input("Player 1: Type in the word to be guessed.\n For a random word, type 0.\n"))
-if word_to_be_guessed[0]=='0':
-    word_to_be_guessed = list(random.choice(random_word_collection))
-placeholder = ""
-previous_guesses = []
-max_points = len(word_to_be_guessed)
-for letter in word_to_be_guessed:
-    placeholder+= "_"
-player_points = 0
+message_to_be_coded = list(input("What is the message?\n").lower())
+shift_number = int(input("What is the shift number?\n"))
+choice = int(input("Do you wish to encrypt or decrypt?\n Type 0 for encryption, 1 for decryption.\n"))
+alphabet = list(string.ascii_lowercase)
 
-print(f"{placeholder}\n\n------\n |    |\n      |\n      |\n      |\n=========\n")
+def encrypt(content, number):
+    i = 0
+    for letter in content:
+        content[i]=alphabet[alphabet.index(content[i])+number]
+        i+=1
+    print("".join(content))
 
-display = list(placeholder)
+def decrypt(content, number):
+    i = 0
+    for letter in content:
+        content[i]=alphabet[alphabet.index(content[i])-number]
+        i+=1
+    print("".join(content))
 
-i = 0
-while number_of_lives!=0:
-    guess = input(f"Player 2: what is your guess? (Guess {i})\n").lower()
+choice_continue=1
+while choice_continue!=0:
+    if choice == 0:
+        encrypt(message_to_be_coded, shift_number)
+    elif choice == 1:
+        decrypt(message_to_be_coded, shift_number)
+    choice_continue = int(input("Do you wish to continue encrypting?\n Type 0 to end program, anything else to continue.\n"))
 
-    while guess in previous_guesses:
-        print("You cant repeat guesses. \n Please try again!")
-        guess = input(f"Player 2: what is your guess? (Guess {i})\n").lower()
-
-    if guess in word_to_be_guessed:
-        player_points=player_points+1
-        print(f"You got it! POINTS: {player_points} MAX_POINTS: {max_points}")
-
-        for index, letter in enumerate(word_to_be_guessed):
-            if letter == guess:
-                display[index] = letter
-
-        if player_points == max_points or "_" not in display:
-            print("Congratulations! \n You win!\n")
-            break
-    else:
-        number_of_lives=number_of_lives-1
-        print(f"That's a miss... \n {number_of_lives} lives left.")
-        if number_of_lives==4:
-            print("------\n |    |\n O    |\n      |\n      |\n=========\n")
-        elif number_of_lives==3:
-            print("------\n |    |\n O    |\n |    |\n      |\n=========\n")
-        elif number_of_lives == 2:
-            print("------\n |    |\n O    |\n/|    |\n      |\n=========\n")
-        elif number_of_lives==1:
-            print("------\n |    |\n O    |\n/|\\   |\n      |\n=========\n")
-
-    i=i+1
-    print("".join(display))
-    previous_guesses.append(guess)
-
-if number_of_lives == 0:
-    print(f"What a shame... \n {number_of_lives} lives left. \n You lost!")
-    print("------\n |    |\n O    |\n/|\\   |\n/ \\   |\n=========")
+if choice_continue==0:
+    print("Thanks for using the Caesar Cypher program! :)")
